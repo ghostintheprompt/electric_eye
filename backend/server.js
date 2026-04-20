@@ -4,6 +4,9 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const authRoutes = require('./routes/auth.routes');
+const cameraRoutes = require('./routes/camera.routes');
+const streamRoutes = require('./routes/stream.routes');
+const controlRoutes = require('./routes/control.routes');
 const { errorHandler, notFoundHandler } = require('./middleware/error.middleware');
 
 const app = express();
@@ -27,6 +30,9 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/cameras', cameraRoutes);
+app.use('/api/streams', streamRoutes);
+app.use('/api/control', controlRoutes);
 
 // Serve static files from frontend build (in production)
 if (process.env.NODE_ENV === 'production') {
