@@ -9,6 +9,8 @@ const streamRoutes = require('./routes/stream.routes');
 const controlRoutes = require('./routes/control.routes');
 const recordingRoutes = require('./routes/recording.routes');
 const incidentRoutes = require('./routes/incident.routes');
+const automationRoutes = require('./routes/automation.routes');
+const automationController = require('./controllers/automation.controller');
 const { errorHandler, notFoundHandler } = require('./middleware/error.middleware');
 
 const app = express();
@@ -37,6 +39,7 @@ app.use('/api/streams', streamRoutes);
 app.use('/api/control', controlRoutes);
 app.use('/api/recordings', recordingRoutes);
 app.use('/api/incidents', incidentRoutes);
+app.use('/api/automation', automationRoutes);
 
 // Serve static files from frontend build (in production)
 if (process.env.NODE_ENV === 'production') {
@@ -61,6 +64,11 @@ app.listen(PORT, () => {
   console.log(`Health check: http://localhost:${PORT}/health`);
   console.log(`API endpoint: http://localhost:${PORT}/api`);
   console.log('===========================================\n');
+
+  // Initialize Automation Services
+  automationController.initSmartPurge();
+  automationController.initSentinel();
+  console.log('Autonomous Services Initialized (Sentinel, Smart Purge)');
 
   // Validate environment variables
   if (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'your-super-secret-jwt-key-change-this-to-something-random') {
